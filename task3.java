@@ -1,5 +1,6 @@
 package lab3;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ interface CommonFunctions {
 
 // Class representing a Customer
 class Customer {
-    private String customerId;
+    String customerId;
     private String name;
     private String address;
     private int phoneNo;
@@ -27,22 +28,15 @@ class Customer {
         this.address = address;
         this.phoneNo = phoneNo;
         this.age = age;
+        this.tickets = new ArrayList<>(); // Initialize the list
     }
 
-    public void addDetails() {
-        // Implementation for adding customer details
-    }
-
-    public void modifyDetails() {
-        // Implementation for modifying customer details
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
     }
 
     public List<Ticket> getTickets() {
         return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
     }
 }
 
@@ -58,27 +52,27 @@ class Agent implements CommonFunctions {
 
     @Override
     public void searchTicket() {
-        // Implementation for searching tickets
+        System.out.println("Searching for tickets...");
     }
 
     @Override
     public void bookTicket() {
-        // Implementation for booking a ticket
+        System.out.println("Booking a ticket...");
     }
 
     @Override
     public void cancelTicket() {
-        // Implementation for cancelling a ticket
+        System.out.println("Cancelling a ticket...");
     }
 
     @Override
     public void makePayment() {
-        // Implementation for making payment
+        System.out.println("Making payment...");
     }
 
     @Override
     public void fillDetails() {
-        // Implementation for filling details
+        System.out.println("Filling details...");
     }
 }
 
@@ -99,18 +93,34 @@ class Ticket {
         this.busNo = busNo;
         this.seatNo = seatNo;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "source='" + source + '\'' +
+                ", destination='" + destination + '\'' +
+                ", dateOfJourney=" + dateOfJourney +
+                ", time='" + time + '\'' +
+                ", busNo='" + busNo + '\'' +
+                ", seatNo='" + seatNo + '\'' +
+                '}';
+    }
 }
 
 // Class for managing bookings at the counter
 class BookingCounter {
     private List<Ticket> bookedTickets;
 
-    public List<Ticket> getBookedTickets() {
-        return bookedTickets;
+    public BookingCounter() {
+        bookedTickets = new ArrayList<>(); // Initialize the list
     }
 
-    public void setBookedTickets(List<Ticket> bookedTickets) {
-        this.bookedTickets = bookedTickets;
+    public void addBookedTicket(Ticket ticket) {
+        bookedTickets.add(ticket);
+    }
+
+    public List<Ticket> getBookedTickets() {
+        return bookedTickets;
     }
 }
 
@@ -125,17 +135,34 @@ class Refund {
     }
 
     public void refundAmount() {
-        // Implementation for refunding amount
+        System.out.println("Refunding " + amount + " to customer " + customerId);
     }
 }
 
-// Main class to test the functionality (optional)
+// Main class to test the functionality
 public class task3 {
     public static void main(String[] args) {
-        // Example usage
+        // Create instances for testing
         Customer customer = new Customer("C001", "John Doe", "123 Main St", 1234567890, 30);
         Agent agent = new Agent(1, "Agent Smith");
 
-        // Further code to test functionalities
+        // Create a ticket and add it to the customer
+        Ticket ticket = new Ticket("City A", "City B", new Date(), "10:00 AM", "Bus 123", "A1");
+        customer.addTicket(ticket);
+
+        // Simulate agent actions
+        agent.searchTicket();
+        agent.bookTicket();
+        agent.makePayment();
+
+        // Display customer tickets
+        System.out.println("Customer Tickets:");
+        for (Ticket t : customer.getTickets()) {
+            System.out.println(t);
+        }
+
+        // Handle a refund
+        Refund refund = new Refund(50.0f, customer.customerId);
+        refund.refundAmount();
     }
 }
